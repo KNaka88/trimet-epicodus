@@ -153,5 +153,12 @@ class Leg
     {
         $GLOBALS['DB']->exec("DELETE FROM legs;");
     }
+
+    static function find($search_id)
+    {
+        $query = $GLOBALS['DB']->query("SELECT * FROM legs WHERE id = {$search_id};");
+        $query->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Leg', ['mode', 'distance', 'from_id',  'to_id', 'start_time' , 'end_time', 'order' , 'route_number' , 'route_name' , 'stop_sequence', 'id']);
+        return $query->fetch();
+    }
 }
 ?>
