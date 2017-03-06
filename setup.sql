@@ -1,7 +1,8 @@
 CREATE DATABASE trimet;
 USE trimet;
 CREATE TABLE locations (id serial PRIMARY KEY, latitude FLOAT, longitude FLOAT, description VARCHAR(255));
-CREATE TABLE legs (id SERIAL PRIMARY KEY , mode VARCHAR(255), route_number VARCHAR(255), route_name VARCHAR(255), `order` VARCHAR(255), start_time DATETIME, end_time DATETIME, distance FLOAT, stop_sequence INT, from_id BIGINT, to_id BIGINT);
+CREATE TABLE legs (id serial PRIMARY KEY , mode VARCHAR(255), route_number VARCHAR(255), route_name VARCHAR(255), `order` VARCHAR(255), start_time DATETIME, end_time DATETIME, distance FLOAT, stop_sequence INT, from_id BIGINT, to_id BIGINT);
+CREATE TABLE itineraries (id serial PRIMARY KEY, distance FLOAT, start_time DATETIME, end_time DATETIME);
 
 
 
