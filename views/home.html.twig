@@ -2,4 +2,21 @@
 
 {% block content %}
     <p>home.html.twig</p>
+    <form action='/trimet' method='post'>
+        <label for='start'>Start</label>
+        <select id='start' name='start-point-id'>
+            {% for location in locations %}
+                <option value='{{ location.getId }}'>{{ location.getDescription }}</option>
+            {% endfor %}
+        </select>
+
+        <label for='end'>End</label>
+        <select id='end' name='end-point-id'>
+            {% for location in locations %}
+                <option value='{{ location.getId }}'>{{ location.getDescription }}</option>
+            {% endfor %}
+        </select>
+
+        <button type='submit'>Route</button>
+    </form>
 {% endblock %}
