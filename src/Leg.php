@@ -137,8 +137,10 @@ class Leg
 
     function save()
     {
+        $route_name = filter_var($this->getRouteName(), FILTER_SANITIZE_MAGIC_QUOTES);
+
         $GLOBALS['DB']->exec(
-        "INSERT INTO legs (from_id, to_id, distance, stop_sequence, start_time, end_time, route_number, route_name, mode, `order`) VALUES ({$this->getFromId()}, {$this->getToId()}, {$this->getDistance()}, {$this->getStopSequence()}, '{$this->getStartTime()}', '{$this->getEndTime()}', '{$this->getRouteNumber()}', '{$this->getRouteName()}', '{$this->getMode()}', '{$this->getOrder()}');"
+        "INSERT INTO legs (from_id, to_id, distance, stop_sequence, start_time, end_time, route_number, route_name, mode, `order`) VALUES ({$this->getFromId()}, {$this->getToId()}, {$this->getDistance()}, {$this->getStopSequence()}, '{$this->getStartTime()}', '{$this->getEndTime()}', '{$this->getRouteNumber()}', '{$route_name}', '{$this->getMode()}', '{$this->getOrder()}');"
         );
         $this->id = $GLOBALS['DB']->lastInsertId();
     }
