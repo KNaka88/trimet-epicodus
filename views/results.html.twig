@@ -7,5 +7,14 @@
         <h1>Start Time: {{ itinerary.getStartTime }}<h1>
         <h1>End Time: {{ itinerary.getEndTime }}</h1>
         <h1>Distance: {{ itinerary.getDistance }} <br></h1>
+        {% for leg in itinerary.getLegs %}
+            <p>{{ leg.getDistance }}</p>
+        {% endfor %}
     {% endfor %}
+
+    {% for location in locations %}
+        <h1>{{location.getDescription}}<br></h1>
+    {% endfor %}
+
+
 {% endblock %}

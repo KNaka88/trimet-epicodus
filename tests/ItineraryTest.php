@@ -198,9 +198,9 @@ class ItineraryTest extends PHPUnit_Framework_TestCase
         $test_Leg3 = new Leg($mode3, $distance3, $from_id3, $to_id3, $itinerary_id, $leg_number3, $start_time3, $end_time3, $order3, $route_number3, $route_name3, $stop_sequence3);
 
 
-        $test_Leg->save();
         $test_Leg2->save();
         $test_Leg3->save();
+        $test_Leg->save();
 
 
         //Act

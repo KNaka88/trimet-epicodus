@@ -37,7 +37,7 @@ $app->get('/', function() use ($app) {
 $app->get('/show_results', function() use ($app) {
     $itineraries = Itinerary::getAll();
     return $app['twig']->render('results.html.twig', [
-        'itineraries' => $itineraries
+        'itineraries' => $itineraries, 'locations'=> Location::getAll()
     ]);
 });
 
@@ -46,7 +46,8 @@ $app->post('/trimet', function() use ($app, $trimet_api) {
     $end_location = Location::find($_POST['end-point-id']);
 
     Itinerary::deleteAll();
-    $date = '3-6-2017';
+    Leg::deleteAll();
+    $date = '3-7-2017';
     $time = '4:12%20PM'; // time + AM or PM
     $arr  = 'D';  // D: departure time, A: Arrival time, nothing: current time
 
@@ -70,6 +71,7 @@ function parseTrimetResults($request_url)
     //itineraries
     $itineraries = $xml->itineraries;
     $itineraries_count = $itineraries->attributes()->count;
+
     for($i=0; $i<$itineraries_count; $i++){
         $itinerary = $itineraries->itinerary[$i];
         $time_distance = $itinerary->{"time-distance"};
@@ -82,27 +84,36 @@ function parseTrimetResults($request_url)
 
         // legs
         $legs = $itinerary->leg;
-        $leg_index = 0;
-        foreach($legs as $leg) {
-            $mode = $leg->attributes()->mode;
-            $order = $leg->attributes()->order;
-            $leg_start_time =
-            DateTime::createFromFormat('n/j/y g:i A', $time_distance->date . ' ' . $leg->{"time-distance"}->startTime);
-            $leg_end_time =
-            DateTime::createFromFormat('n/j/y g:i A', $time_distance->date . ' ' . $leg->{"time-distance"}->endTime);
-            $leg_distance = $leg->{"time-distance"}->distance;
-            $route_number = $leg->route->number;
-            $route_name = $leg->route->name;
+        $legs_count = count($legs);
+
+        for($j=0; $j<$legs_count; $j++){
+            $mode = $legs[$j]->attributes()->mode;
+            $order = $legs[$j]->attributes()->order;
+
+            $leg_start_time = null;
+            $leg_end_time = null;
+
+            if(!empty($legs[$j]->{"time-distance"}->startTime)){
+                $leg_start_time =
+                DateTime::createFromFormat('n/j/y g:i A', $time_distance->date . ' ' . $legs[$j]->{"time-distance"}->startTime)->format('Y-m-d H:i:s');
+
+                $leg_end_time =
+                DateTime::createFromFormat('n/j/y g:i A', $time_distance->date . ' ' . $legs[$j]->{"time-distance"}->endTime)->format('Y-m-d H:i:s');
+                $leg_distance = $legs[$j]->{"time-distance"}->distance;
+                $route_number = $legs[$j]->route->number;
+                $route_name = $legs[$j]->route->name;
+            }
+
+
 
             $to_location = new Location($to->pos->lat, $to->pos->long, $to->description);
             $to_location->save();
             $from_location = new Location($from->pos->lat, $from->pos->long, $from->description);
             $from_location->save();
+            $new_leg = new Leg($mode, $leg_distance, $from_location->getId(), $to_location->getId(), $itinerary_id, $j, $leg_start_time, $leg_end_time, $order, $route_number, $route_name);
 
-            $new_leg = new Leg($mode, $leg_distance, $from_location->getId(), $to_location->getId(), $itinerary_id, $leg_index, $leg_start_time, $leg_end_time, $order, $route_number, $route_name);
             $new_leg->save();
 
-            $leg_index++;
         }
     }
 }
