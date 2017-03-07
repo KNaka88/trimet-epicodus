@@ -7,6 +7,6 @@ CREATE TABLE itineraries (id serial PRIMARY KEY, distance DECIMAL(5, 2), start_t
 
 # POPULATE
 USE trimet;
-INSERT INTO locations (latitude, longitude, description) VALUES (45.58757, -122.5931, "Portland Int'l Airport MAX Station");
-INSERT INTO locations (latitude, longitude, description) VALUES (45.519125, -122.678982, "Pioneer Square North MAX Station");
-INSERT INTO locations (latitude, longitude, description) VALUES (45.435653, -122.567867, "Clackamas Town Center TC MAX Station");
+INSERT INTO locations (latitude, longitude, description, stop_id) VALUES (45.58757, -122.5931, "Portland Int'l Airport MAX Station", 10579);
+INSERT INTO locations (latitude, longitude, description, stop_id) VALUES (45.519125, -122.678982, "Pioneer Square North MAX Station", 8383);
+INSERT INTO locations (latitude, longitude, description, stop_id) VALUES (45.435653, -122.567867, "Clackamas Town Center TC MAX Station", 13132);

@@ -1,22 +1,38 @@
 {% extends 'template.html.twig' %}
 
 {% block content %}
-    <p>home.html.twig</p>
-    <form action='/trimet' method='post'>
+<div class="row">
+    <h3> Today: {{ "now"|date("m/d/Y") }}</h3>
+
+    <form class="form-group" action='/trimet' method='post'>
         <label for='start'>Start</label>
-        <select id='start' name='start-point-id'>
+        <select class="form-control" id='start' name='start-point-id'>
+            <option>Current Location</option>
             {% for location in locations %}
-                <option value='{{ location.getId }}'>{{ location.getDescription }}</option>
+            <option value='{{ location.getId }}'>{{ location.getDescription }}</option>
             {% endfor %}
         </select>
 
+        <br>
+        <br>
         <label for='end'>End</label>
-        <select id='end' name='end-point-id'>
+        <select class="form-control" id='end' name='end-point-id'>
             {% for location in locations %}
-                <option value='{{ location.getId }}'>{{ location.getDescription }}</option>
+            <option value='{{ location.getId }}'>{{ location.getDescription }}</option>
             {% endfor %}
-        </select>
+        </select><br>
+        <label for="search">Enter an Address:</label>
+        <input class="form-control" type="text" name="search" value="">
+        <br>
 
-        <button type='submit'>Route</button>
+        <label for="time">Time</label>
+        <input class="form-control" type="text" name="time" value="{{time}}">
+        <br>
+
+        <button class="btn btn-success" type='submit'>Route</button>
     </form>
+</div>
+<div class="row">
+    <div id="googleMap" style="width:100%;height:400px;"></div>
+</div>
 {% endblock %}

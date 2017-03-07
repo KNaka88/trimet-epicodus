@@ -25,10 +25,13 @@ $app->register(new Silex\Provider\TwigServiceProvider(), [
 // ROUTES
 //*********************************
 
-$app->get('/', function() use ($app) {
+$app->get('/', function() use ($app, $google_api) {
+
     $locations = Location::getAll();
+    $time = date('h:ia');
     return $app['twig']->render('home.html.twig', [
-        'locations' => $locations
+        'locations' => $locations, 'time' => $time,
+        'google_api' => $google_api
     ]);
 });
 
