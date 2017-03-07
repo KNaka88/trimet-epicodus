@@ -3,10 +3,14 @@
     <head>
         <meta charset="utf-8">
         <link href='/../css/bootstrap.min.css' rel='stylesheet' type='text/css'>
-        <!-- <script src="https://maps.googleapis.com/maps/api/js?key=&callback=myMap"></script> -->
+        <script
+  src="https://code.jquery.com/jquery-2.2.4.min.js"
+  integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+  crossorigin="anonymous"></script>
 
         <script type="text/javascript" src="/../js/scripts.js"></script>
         <title>TriMet app</title>
+
     </head>
     <body>
         <div class='container'>
@@ -16,5 +20,7 @@
             {% block content %}
             {% endblock %}
         </div>
+        <script src="https://maps.googleapis.com/maps/api/js?{{google_api}}&callback=initMap"
+    async defer></script>
     </body>
 </html>
