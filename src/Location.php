@@ -1,16 +1,18 @@
 <?php
 class Location
 {
-    private $id;
     private $latitude;
     private $longitude;
     private $description;
+    private $stop_id;
+    private $id;
 
-    function __construct($lat, $long, $desc = null, $id = null)
+    function __construct($lat, $long, $desc = " ", $stop_id=null, $id = null)
     {
-        $this->latitude = $lat;
-        $this->longitude = $long;
-        $this->description = $desc;
+        $this->latitude = (float) $lat;
+        $this->longitude = (float) $long;
+        $this->description = (string) $desc;
+        $this->stop_id = $stop_id;
         $this->id = $id;
     }
 
@@ -34,23 +36,45 @@ class Location
         return $this->description;
     }
 
+    function getStopId()
+    {
+        return $this->stop_id;
+    }
+
     function save()
     {
-        $GLOBALS['DB']->exec("INSERT INTO locations (latitude, longitude, description) VALUES ({$this->getLatitude()}, {$this->getLongitude()}, '{$this->getDescription()}');");
+
+        $GLOBALS['DB']->exec("INSERT INTO locations (latitude, longitude, description, stop_id) VALUES ({$this->getLatitude()}, {$this->getLongitude()}, '{$this->getDescription()}', {$this->getStopId()});");
         $this->id = $GLOBALS['DB']->lastInsertId();
+
     }
 
     static function getAll()
     {
-        $query = $GLOBALS['DB']->query("SELECT * FROM locations;");
-        return $query->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Location', [ 'latitude', 'longitude', 'description', 'id' ]);
+        $returned_locations = $GLOBALS['DB']->query("SELECT * FROM locations;");
+        $locations= [];
+        foreach ($returned_locations as $location) {
+            $latitude= $location['latitude'];
+            $longitude= $location['longitude'];
+            $description= $location['description'];
+            $stop_id = $location['stop_id'];
+            $id= $location['id'];
+            $new_location= new Location($latitude, $longitude, $description, $stop_id, $id);
+            array_push($locations, $new_location);
+        }
+        return $locations;
+        // return $query->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Location', [ 'latitude', 'longitude', 'description', 'stop_id', 'id' ]);
+    }
+    static function deleteAll()
+    {
+        $GLOBALS['DB']->exec("DELETE FROM locations;");
     }
 
     static function find($search_id)
     {
         $found_location = null;
         $query = $GLOBALS['DB']->query("SELECT * FROM locations WHERE id = {$search_id};");
-        $query->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Location', [ 'latitude', 'longitude', 'description', 'id' ]);
+        $query->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Location', [ 'latitude', 'longitude', 'description', 'stop_id', 'id' ]);
         $found_location = $query->fetch();
         return $found_location;
     }
