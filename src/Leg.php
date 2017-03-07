@@ -1,5 +1,4 @@
 <?php
-require_once 'src/Location.php';
 
 class Leg
 {
@@ -15,13 +14,13 @@ class Leg
     private $order; // start, transfer, thru-route, end, empty
     private $stop_sequence; // number of stops
     private $itinerary_id;
-    private $sequence_id;
+    private $leg_number;
 
-    function __construct($mode, $distance, $from,  $to, $itinerary_id, $sequence_id, $start_time = null, $end_time = null, $order = null, $route_number = null, $route_name = null, $stop_sequence = 0, $id = null)
+    function __construct($mode, $distance, $from,  $to, $itinerary_id, $leg_number, $start_time = null, $end_time = null, $order = null, $route_number = null, $route_name = null, $stop_sequence = 0, $id = null)
     {
         $this->id = $id;
         $this->itinerary_id = $itinerary_id;
-        $this->sequence_id = $sequence_id;
+        $this->leg_number = $leg_number;
         $this->mode = $mode;
         $this->distance = $distance;
         $this->from_id = $from;
@@ -44,9 +43,9 @@ class Leg
         return $this->itinerary_id;
     }
 
-    function getSequenceId()
+    function getLegNumber()
     {
-        return $this->sequence_id;
+        return $this->leg_number;
     }
 
     function getMode()
@@ -104,9 +103,9 @@ class Leg
         $this->itinerary_id = $new_value;
     }
 
-    function setSequenceId($new_value)
+    function setLegNumber($new_value)
     {
-        $this->sequence_id = $new_value;
+        $this->leg_number = $new_value;
     }
 
     function setMode($new_value)
@@ -164,7 +163,7 @@ class Leg
         $route_name = filter_var($this->getRouteName(), FILTER_SANITIZE_MAGIC_QUOTES);
 
         $GLOBALS['DB']->exec(
-        "INSERT INTO legs (from_id, to_id, itinerary_id, sequence_id, distance, stop_sequence, start_time, end_time, route_number, route_name, mode, `order`) VALUES ({$this->getFromId()}, {$this->getToId()}, {$this->getItineraryId()}, {$this->getSequenceId()}, {$this->getDistance()}, {$this->getStopSequence()}, '{$this->getStartTime()}', '{$this->getEndTime()}', '{$this->getRouteNumber()}', '{$route_name}', '{$this->getMode()}', '{$this->getOrder()}');"
+        "INSERT INTO legs (from_id, to_id, itinerary_id, leg_number, distance, stop_sequence, start_time, end_time, route_number, route_name, mode, `order`) VALUES ({$this->getFromId()}, {$this->getToId()}, {$this->getItineraryId()}, {$this->getLegNumber()}, {$this->getDistance()}, {$this->getStopSequence()}, '{$this->getStartTime()}', '{$this->getEndTime()}', '{$this->getRouteNumber()}', '{$route_name}', '{$this->getMode()}', '{$this->getOrder()}');"
         );
         $this->id = $GLOBALS['DB']->lastInsertId();
     }
@@ -172,7 +171,7 @@ class Leg
     static function getAll()
     {
         $query = $GLOBALS['DB']->query("SELECT * FROM legs;");
-        return $query->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Leg', ['mode', 'distance', 'from_id',  'to_id', 'itinerary_id', 'sequence_id', 'start_time' , 'end_time', 'order' , 'route_number' , 'route_name' , 'stop_sequence', 'id' ]);
+        return $query->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Leg', ['mode', 'distance', 'from_id',  'to_id', 'itinerary_id', 'leg_number', 'start_time' , 'end_time', 'order' , 'route_number' , 'route_name' , 'stop_sequence', 'id' ]);
     }
 
     static function deleteAll()
@@ -183,7 +182,7 @@ class Leg
     static function find($search_id)
     {
         $query = $GLOBALS['DB']->query("SELECT * FROM legs WHERE id = {$search_id};");
-        $query->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Leg', ['mode', 'distance', 'from_id',  'to_id', 'itinerary_id', 'sequence_id',  'start_time' , 'end_time', 'order' , 'route_number' , 'route_name' , 'stop_sequence', 'id']);
+        $query->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Leg', ['mode', 'distance', 'from_id',  'to_id', 'itinerary_id', 'leg_number',  'start_time' , 'end_time', 'order' , 'route_number' , 'route_name' , 'stop_sequence', 'id']);
         return $query->fetch();
     }
 }

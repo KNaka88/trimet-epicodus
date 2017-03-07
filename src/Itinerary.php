@@ -55,6 +55,12 @@ class Itinerary
         $this->id = $GLOBALS['DB']->lastInsertId();
     }
 
+    function getLegs()
+    {
+        $query = $GLOBALS['DB']->query("SELECT * FROM legs WHERE itinerary_id = {$this->getId()} ORDER BY leg_number;");
+        return $query->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Leg', ['mode', 'distance', 'from_id',  'to_id', 'itinerary_id', 'leg_number', 'start_time' , 'end_time', 'order' , 'route_number' , 'route_name' , 'stop_sequence', 'id' ]);
+    }
+
     static function getAll()
     {
         $query = $GLOBALS['DB']->query("SELECT * FROM itineraries;");

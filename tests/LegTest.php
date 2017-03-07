@@ -16,6 +16,7 @@ class LegTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         Leg::deleteAll();
+        Itinerary::deleteAll();
     }
 
     function test_save()
@@ -38,6 +39,7 @@ class LegTest extends PHPUnit_Framework_TestCase
         $itinerary_id = 1;
         $sequence_id = 1;
         $test_Leg = new Leg($mode, $distance, $from_id, $to_id, $itinerary_id, $sequence_id, $start_time, $end_time, $order, $route_number, $route_name, $stop_sequence);
+
 
         //Act
         $test_Leg->save();
