@@ -35,7 +35,9 @@ class LegTest extends PHPUnit_Framework_TestCase
         $to_id = 2; // Location
         $order = "start"; // start, transfer, thru-route, end, empty
         $stop_sequence = 20; // number of stops
-        $test_Leg = new Leg($mode, $distance, $from_id, $to_id, $start_time, $end_time, $order, $route_number, $route_name, $stop_sequence);
+        $itinerary_id = 1;
+        $sequence_id = 1;
+        $test_Leg = new Leg($mode, $distance, $from_id, $to_id, $itinerary_id, $sequence_id, $start_time, $end_time, $order, $route_number, $route_name, $stop_sequence);
 
         //Act
         $test_Leg->save();
@@ -62,7 +64,9 @@ class LegTest extends PHPUnit_Framework_TestCase
         $to_id = 2; // Location
         $order = "start"; // start, transfer, thru-route, end, empty
         $stop_sequence = 20; // number of stops
-        $test_Leg = new Leg($mode, $distance, $from_id, $to_id, $start_time, $end_time, $order, $route_number, $route_name, $stop_sequence);
+        $itinerary_id = 1;
+        $sequence_id = 1;
+        $test_Leg = new Leg($mode, $distance, $from_id, $to_id, $itinerary_id, $sequence_id, $start_time, $end_time, $order, $route_number, $route_name, $stop_sequence);
         $test_Leg->save();
 
         $mode2 = "Light Rail";
@@ -79,7 +83,9 @@ class LegTest extends PHPUnit_Framework_TestCase
         $to_id2 = 4; // Location
         $order2 = "transfer"; // start, transfer, thru-route, end, empty
         $stop_sequence2 = 20; // number of stops
-        $test_Leg2 = new Leg($mode2, $distance2, $from_id2, $to_id2, $start_time2, $end_time2, $order2, $route_number2, $route_name2, $stop_sequence2);
+        $itinerary_id2 = 1;
+        $sequence_id2 = 2;
+        $test_Leg2 = new Leg($mode2, $distance2, $from_id2, $itinerary_id2, $sequence_id2, $to_id2, $start_time2, $end_time2, $order2, $route_number2, $route_name2, $stop_sequence2);
         $test_Leg2->save();
 
         //Act
@@ -106,7 +112,9 @@ class LegTest extends PHPUnit_Framework_TestCase
         $to_id = 2; // Location
         $order = "start"; // start, transfer, thru-route, end, empty
         $stop_sequence = 20; // number of stops
-        $test_Leg = new Leg($mode, $distance, $from_id, $to_id, $start_time, $end_time, $order, $route_number, $route_name, $stop_sequence);
+        $itinerary_id = 1;
+        $sequence_id = 1;
+        $test_Leg = new Leg($mode, $distance, $from_id, $to_id, $itinerary_id, $sequence_id, $start_time, $end_time, $order, $route_number, $route_name, $stop_sequence);
         $test_Leg->save();
 
         $mode2 = "Light Rail";
@@ -123,7 +131,9 @@ class LegTest extends PHPUnit_Framework_TestCase
         $to_id2 = 4; // Location
         $order2 = "transfer"; // start, transfer, thru-route, end, empty
         $stop_sequence2 = 20; // number of stops
-        $test_Leg2 = new Leg($mode2, $distance2, $from_id2, $to_id2, $start_time2, $end_time2, $order2, $route_number2, $route_name2, $stop_sequence2);
+        $itinerary_id2 = 1;
+        $sequence_id2 = 2;
+        $test_Leg2 = new Leg($mode2, $distance2, $from_id2, $to_id2, $itinerary_id2, $sequence_id2, $start_time2, $end_time2, $order2, $route_number2, $route_name2, $stop_sequence2);
         $test_Leg2->save();
 
         //Act
@@ -152,7 +162,9 @@ class LegTest extends PHPUnit_Framework_TestCase
         $to_id = 2; // Location
         $order = "start"; // start, transfer, thru-route, end, empty
         $stop_sequence = 20; // number of stops
-        $test_Leg = new Leg($mode, $distance, $from_id, $to_id, $start_time, $end_time, $order, $route_number, $route_name, $stop_sequence);
+        $itinerary_id = 1;
+        $sequence_id = 1;
+        $test_Leg = new Leg($mode, $distance, $from_id, $to_id, $itinerary_id, $sequence_id, $start_time, $end_time, $order, $route_number, $route_name, $stop_sequence);
         $test_Leg->save();
 
         $mode2 = "Light Rail";
@@ -169,7 +181,9 @@ class LegTest extends PHPUnit_Framework_TestCase
         $to_id2 = 4; // Location
         $order2 = "transfer"; // start, transfer, thru-route, end, empty
         $stop_sequence2 = 20; // number of stops
-        $test_Leg2 = new Leg($mode2, $distance2, $from_id2, $to_id2, $start_time2, $end_time2, $order2, $route_number2, $route_name2, $stop_sequence2);
+        $itinerary_id2 = 1;
+        $sequence_id2 = 2;
+        $test_Leg2 = new Leg($mode2, $distance2, $from_id2, $to_id2, $itinerary_id2, $sequence_id2, $start_time2, $end_time2, $order2, $route_number2, $route_name2, $stop_sequence2);
         $test_Leg2->save();
         $search_id = $test_Leg2->getId();
 
