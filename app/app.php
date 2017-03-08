@@ -45,7 +45,16 @@ $app->get('/show_results', function() use ($app, $google_api) {
 });
 
 $app->post('/trimet', function() use ($app, $trimet_api) {
-    $start_location = Location::find($_POST['start-point-id']);
+
+    $start_location_value = $_POST['start-point-id'];
+    if($start_location_value == "current"){
+        $start_lat = $_POST['cur_lat'];
+        $start_lng = $_POST['cur_lng'];
+    }else{
+        $start_location = Location::find($start_location_value);
+        $start_lat = $start_location->getLatitude();
+        $start_lng = $start_location->getLongitude();
+    }
 
     $end_point_value = $_POST['end-point-id'];
 
@@ -72,7 +81,7 @@ $app->post('/trimet', function() use ($app, $trimet_api) {
     // Setting Destination (On process)
     $request_url =
     "https://developer.trimet.org/ws/V1/trips/tripplanner/" .
-    "maxIntineraries/3/format/xml/fromCoord/{$start_location->getLongitude()},{$start_location->getLatitude()}/toCoord/{$dest_lng},{$dest_lat}/date/{$date}/time/{$time}/arr/{$arr}/min/T/walk/0.50/mode/T/appId/{$trimet_api}";
+    "maxIntineraries/3/format/xml/fromCoord/{$start_lng},{$start_lat}/toCoord/{$dest_lng},{$dest_lat}/date/{$date}/time/{$time}/arr/{$arr}/min/T/walk/0.50/mode/T/appId/{$trimet_api}";
 
 
     parseTrimetResults($request_url);

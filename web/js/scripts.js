@@ -39,6 +39,12 @@ function initMap() {
                 lng: position.coords.longitude
             };
 
+            var curLat = pos.lat;
+            var curLng = pos.lng;
+            document.getElementById("cur_lat").setAttribute("value", curLat);
+            document.getElementById("cur_lng").setAttribute("value", curLng);
+
+
             var ctaLayer = new google.maps.KmlLayer({
                 url: 'https://developer.trimet.org/gis/data/tm_rail_lines.kml',
                 map: map
