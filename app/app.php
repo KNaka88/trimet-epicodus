@@ -10,6 +10,8 @@ require_once __DIR__ . '/../src/Leg.php';
 
 $app = new Silex\Application();
 $app['debug'] = true;
+// use Symfony\Component\Debug\Debug;
+//   Debug::enable();
 
 $server = 'mysql:host=localhost:8889;dbname=trimet';
 $username = 'root';
@@ -27,6 +29,9 @@ $app->register(new Silex\Provider\TwigServiceProvider(), [
 // ROUTES
 //*********************************
 
+
+
+
 $app->get('/', function() use ($app, $google_api) {
 
     $locations = Location::getAll();
@@ -39,12 +44,17 @@ $app->get('/', function() use ($app, $google_api) {
 
 $app->get('/show_results', function() use ($app) {
     $itineraries = Itinerary::getAll();
+    $location = Location::getAll(); // array[location1, location2, location3];
+
+
     return $app['twig']->render('results.html.twig', [
         'itineraries' => $itineraries, 'locations'=> Location::getAll()
     ]);
 });
 
+
 $app->post('/trimet', function() use ($app, $trimet_api) {
+
 
     $start_location_value = $_POST['start-point-id'];
     if($start_location_value == "current"){
@@ -55,7 +65,6 @@ $app->post('/trimet', function() use ($app, $trimet_api) {
         $start_lat = $start_location->getLatitude();
         $start_lng = $start_location->getLongitude();
     }
-
     $end_point_value = $_POST['end-point-id'];
 
     if($end_point_value == "pinned"){
@@ -66,6 +75,7 @@ $app->post('/trimet', function() use ($app, $trimet_api) {
         $dest_lat = $end_location->getLatitude();
         $dest_lng = $end_location->getLongitude();
     }
+
 
     Itinerary::deleteAll();
     Leg::deleteAll();
@@ -79,6 +89,7 @@ $app->post('/trimet', function() use ($app, $trimet_api) {
     $request_url =
     "https://developer.trimet.org/ws/V1/trips/tripplanner/" .
     "maxIntineraries/3/format/xml/fromCoord/{$start_lng},{$start_lat}/toCoord/{$dest_lng},{$dest_lat}/date/{$date}/time/{$time}/arr/{$arr}/min/T/walk/0.50/mode/T/appId/{$trimet_api}";
+
 
 
     parseTrimetResults($request_url);

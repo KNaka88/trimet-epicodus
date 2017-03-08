@@ -5,6 +5,7 @@ $(document).ready(function() {
     });
 });
 
+
 var resetDate = function() {
     var now = new Date();
     var minutes = ('0' + now.getMinutes()).slice(-2);
@@ -14,7 +15,6 @@ var resetDate = function() {
     var today = now.getFullYear()+"-"+(month)+"-"+(day)+'T'+(hours)+':'+(minutes);
     $('input#datetime-picker').val(today);
 };
-
 
 var markerSingleton = null;
 
