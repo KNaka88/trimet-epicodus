@@ -27,6 +27,9 @@ $app->register(new Silex\Provider\TwigServiceProvider(), [
 // ROUTES
 //*********************************
 
+
+
+
 $app->get('/', function() use ($app, $google_api) {
 
     $locations = Location::getAll();
@@ -61,9 +64,8 @@ $app->post('/trimet', function() use ($app, $trimet_api) {
 
     parseTrimetResults($request_url);
 
-    
 
-    // return "Stop";
+
     return $app->redirect('/show_results');
 });
 

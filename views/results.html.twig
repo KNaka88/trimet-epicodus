@@ -2,23 +2,15 @@
 
 
 {% block content %}
-{% for itinerary in itineraries %}
-    <div class="panel panel-default">
-        <div class="panel-heading">Option:</div>
-        <div class="panel-body">
-            <h3>Start Time: {{ itinerary.getStartTime }}<h3>
-                <h3>End Time: {{ itinerary.getEndTime }}</h3>
-                <h3>Distance: {{ itinerary.getDistance }} <br></h3>
-            </div>
-    </div>
-    {% for leg in itinerary.getLegs %}
-            <p>{{ leg.getDistance }}</p>
-        {% endfor %}
-    {% endfor %}
-
+  <label for="location_id">Itinerary</label>
+  <select class="form-control" id="location_id" name="location_id">
     {% for location in locations %}
-        <h3>{{location.getDescription}}<br></h3>
-    {% endfor %}
+    <option value="{{location.getId}}">{{location.getDescription}}</option>
+    {%endfor%}
+  </select><br>
+  <button class="btn" type="submit">select</button>
+
+
 
 
 {% endblock %}
