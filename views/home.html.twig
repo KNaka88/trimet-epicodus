@@ -9,7 +9,7 @@
         <input type="button" id="this_lat" name="this_lat" >
         <input type="button" id="this_lng" name="this_lng">
         <select class="form-control" id='start' name='start-point-id'>
-            <option>Current Location</option>
+            <option value='current'>Current Location</option>
             {% for location in locations %}
             <option value='{{ location.getId }}'>{{ location.getDescription }}</option>
             {% endfor %}
@@ -18,21 +18,28 @@
         <br>
         <br>
         <label for='end'>End</label>
-        <select class="form-control" id='end-point-id' name='end-point-id'>
+        <select class="form-control" id='end' name='end-point-id'>
             {% for location in locations %}
             <option value='{{ location.getId }}'>{{ location.getDescription }}</option>
             {% endfor %}
         </select><br>
-        <label for="search">Enter an Address:</label>
-        <input class="form-control" type="text" name="search" value="">
+        <br>
+        <select name='time-priority'>
+            <option value='D'>Leave at</option>
+            <option value='A'>Arrive by</option>
+        </select>
+        <input type='datetime-local' id='datetime-picker' name='date-time'>
+
         <br>
 
-        <label for="time">Time</label>
-        <input class="form-control" type="text" name="time" value="{{time}}">
-        <br>
+        <input id="cur_lat" name="cur_lat" type="hidden">
+        <input id="cur_lng" name="cur_lng" type="hidden">
+        <input id="dest_lat" name="dest_lat" type="hidden">
+        <input id="dest_lng" name="dest_lng" type="hidden">
 
         <button class="btn btn-success" type='submit'>Route</button>
     </form>
+    <button id='leave-now-btn'>Leave Now</button>
 </div>
 <div class="row">
     <div id="map" style="width: 75vw; height: 40vh;"></div>

@@ -35,16 +35,21 @@ $app->register(new Silex\Provider\TwigServiceProvider(), [
 $app->get('/', function() use ($app, $google_api) {
 
     $locations = Location::getAll();
-    $time = date('h:ia');
+    $time = date('g:i');
     return $app['twig']->render('home.html.twig', [
         'locations' => $locations, 'time' => $time,
         'google_api' => $google_api
     ]);
 });
+
+
 $app->get('/show_results', function() use ($app, $google_api) {
     $itineraries = Itinerary::getAll();
+    $location = Location::getAll(); // array[location1, location2, location3];
+
+
     return $app['twig']->render('results.html.twig', [
-        'itineraries' => $itineraries, 'this_lat' => $this_lat, 'end_location'=>$end_location, 'locations'=> Location::getAll(), 'google_api' => $google_api
+        'itineraries' => $itineraries, 'locations'=> Location::getAll(), 'google_api' => $google_api
     ]);
 });
 
@@ -54,20 +59,47 @@ $app->post('/trimet', function() use ($app, $trimet_api) {
     $end_location = Location::find($_POST['end-point-id']);
     $this_lat = $_POST['this_lat'];
     $this_lng = $_POST['this_lng'];
+
+    $start_location_value = $_POST['start-point-id'];
+    if($start_location_value == "current"){
+        $start_lat = $_POST['cur_lat'];
+        $start_lng = $_POST['cur_lng'];
+    }else{
+        $start_location = Location::find($start_location_value);
+        $start_lat = $start_location->getLatitude();
+        $start_lng = $start_location->getLongitude();
+    }
+
+    $end_point_value = $_POST['end-point-id'];
+
+    if($end_point_value == "pinned"){
+        $dest_lat = $_POST['dest_lat'];
+        $dest_lng = $_POST['dest_lng'];
+    }else{
+        $end_location = Location::find($end_point_value);
+        $dest_lat = $end_location->getLatitude();
+        $dest_lng = $end_location->getLongitude();
+    }
+
+
+
+
     Itinerary::deleteAll();
     Leg::deleteAll();
-    $date = '3-7-2017';
-    $time = '4:12%20PM'; // time + AM or PM
-    $arr  = 'D';  // D: departure time, A: Arrival time, nothing: current time
+    $date_time_strings = explode('T', $_POST['date-time']);
+    $date_obj = DateTime::createFromFormat('Y-m-d H:i', $date_time_strings[0] . ' ' . $date_time_strings[1]);
+    $date = $date_obj->format('n-j-Y');
+    $time = "{$date_obj->format('g:i')}%20{$date_obj->format('A')}"; // time + AM or PM
+    $arr  = $_POST['time-priority'];  // D: departure time, A: Arrival time, nothing: current time
 
+    // Setting Destination (On process)
     $request_url =
     "https://developer.trimet.org/ws/V1/trips/tripplanner/" .
-    "maxIntineraries/3/format/xml/fromCoord/{$start_location->getLongitude()},{$start_location->getLatitude()}/toCoord/{$end_location->getLongitude()},{$end_location->getLatitude()}/date/{$date}/time/{$time}/arr/{$arr}/min/T/walk/0.50/mode/T/appId/{$trimet_api}";
+    "maxIntineraries/3/format/xml/fromCoord/{$start_lng},{$start_lat}/toCoord/{$dest_lng},{$dest_lat}/date/{$date}/time/{$time}/arr/{$arr}/min/T/walk/0.50/mode/T/appId/{$trimet_api}";
+
+
 
     parseTrimetResults($request_url);
-
-
-
     return $app->redirect('/show_results');
 });
 
