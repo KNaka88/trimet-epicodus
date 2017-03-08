@@ -37,10 +37,10 @@ $app->get('/', function() use ($app, $google_api) {
     ]);
 });
 
-$app->get('/show_results', function() use ($app, $google_api) {
+$app->get('/show_results', function() use ($app) {
     $itineraries = Itinerary::getAll();
     return $app['twig']->render('results.html.twig', [
-        'itineraries' => $itineraries, 'locations'=> Location::getAll(), 'google_api' => $google_api
+        'itineraries' => $itineraries, 'locations'=> Location::getAll()
     ]);
 });
 
@@ -66,9 +66,6 @@ $app->post('/trimet', function() use ($app, $trimet_api) {
         $dest_lat = $end_location->getLatitude();
         $dest_lng = $end_location->getLongitude();
     }
-
-
-
 
     Itinerary::deleteAll();
     Leg::deleteAll();

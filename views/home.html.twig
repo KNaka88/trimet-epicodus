@@ -43,3 +43,8 @@
     <div id="map" style="width: 75vw; height: 40vh;"></div>
 </div>
 {% endblock %}
+
+{% block body_scripts %}
+    <script src="https://maps.googleapis.com/maps/api/js?{{google_api}}&callback=initMap"
+    async defer></script>
+{% endblock %}
