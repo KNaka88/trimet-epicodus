@@ -2,14 +2,13 @@
 
 
 {% block content %}
-  <label for="location_id">Itinerary</label>
-  <select class="form-control" id="location_id" name="location_id">
-    {% for location in locations %}
-    <option value="{{location.getId}}">{{location.getDescription}}</option>
-    {%endfor%}
-  </select><br>
-  <button class="btn" type="submit">select</button>
 
+
+
+
+{% if locations is not empty %}
+<h2>{{ end_location.getDescription }}</h2>
+{% endif %}
 
 
 

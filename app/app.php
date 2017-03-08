@@ -10,6 +10,8 @@ require_once __DIR__ . '/../src/Leg.php';
 
 $app = new Silex\Application();
 $app['debug'] = true;
+// use Symfony\Component\Debug\Debug;
+//   Debug::enable();
 
 $server = 'mysql:host=localhost:8889;dbname=trimet';
 $username = 'root';
@@ -39,13 +41,13 @@ $app->get('/', function() use ($app, $google_api) {
         'google_api' => $google_api
     ]);
 });
-
 $app->get('/show_results', function() use ($app, $google_api) {
     $itineraries = Itinerary::getAll();
     return $app['twig']->render('results.html.twig', [
-        'itineraries' => $itineraries, 'locations'=> Location::getAll(), 'google_api' => $google_api
+        'itineraries' => $itineraries, 'this_lat' => $this_lat, 'end_location'=>$end_location, 'locations'=> Location::getAll(), 'google_api' => $google_api
     ]);
 });
+
 
 $app->post('/trimet', function() use ($app, $trimet_api) {
     $start_location = Location::find($_POST['start-point-id']);
