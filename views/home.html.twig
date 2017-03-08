@@ -7,7 +7,7 @@
     <form class="form-group" action='/trimet' method='post'>
         <label for='start'>Start</label>
         <select class="form-control" id='start' name='start-point-id'>
-            <option>Current Location</option>
+            <option value='current'>Current Location</option>
             {% for location in locations %}
             <option value='{{ location.getId }}'>{{ location.getDescription }}</option>
             {% endfor %}
@@ -21,8 +21,6 @@
             <option value='{{ location.getId }}'>{{ location.getDescription }}</option>
             {% endfor %}
         </select><br>
-        <label for="search">Enter an Address:</label>
-        <input class="form-control" type="text" name="search" value="">
         <br>
         <select name='time-priority'>
             <option value='D'>Leave at</option>
@@ -31,6 +29,9 @@
         <input type='datetime-local' id='datetime-picker' name='date-time'>
 
         <br>
+
+        <input id="dest_lat" name="dest_lat">
+        <input id="dest_lng" name="dest_lng">
 
         <button class="btn btn-success" type='submit'>Route</button>
     </form>
