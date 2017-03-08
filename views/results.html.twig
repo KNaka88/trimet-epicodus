@@ -2,18 +2,22 @@
 
 
 {% block content %}
-
-    {% for itinerary in itineraries %}
-        <h1>Start Time: {{ itinerary.getStartTime }}<h1>
-        <h1>End Time: {{ itinerary.getEndTime }}</h1>
-        <h1>Distance: {{ itinerary.getDistance }} <br></h1>
-        {% for leg in itinerary.getLegs %}
+{% for itinerary in itineraries %}
+    <div class="panel panel-default">
+        <div class="panel-heading">Option:</div>
+        <div class="panel-body">
+            <h3>Start Time: {{ itinerary.getStartTime }}<h3>
+                <h3>End Time: {{ itinerary.getEndTime }}</h3>
+                <h3>Distance: {{ itinerary.getDistance }} <br></h3>
+            </div>
+    </div>
+    {% for leg in itinerary.getLegs %}
             <p>{{ leg.getDistance }}</p>
         {% endfor %}
     {% endfor %}
 
     {% for location in locations %}
-        <h1>{{location.getDescription}}<br></h1>
+        <h3>{{location.getDescription}}<br></h3>
     {% endfor %}
 
 

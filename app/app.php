@@ -61,6 +61,8 @@ $app->post('/trimet', function() use ($app, $trimet_api) {
 
     parseTrimetResults($request_url);
 
+    
+
     // return "Stop";
     return $app->redirect('/show_results');
 });
