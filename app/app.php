@@ -37,17 +37,18 @@ $app->get('/', function() use ($app, $google_api) {
     ]);
 });
 
-$app->get('/show_results', function() use ($app) {
+$app->get('/show_results', function() use ($app, $google_api) {
     $itineraries = Itinerary::getAll();
     return $app['twig']->render('results.html.twig', [
-        'itineraries' => $itineraries, 'locations'=> Location::getAll()
+        'itineraries' => $itineraries, 'locations'=> Location::getAll(), 'google_api' => $google_api
     ]);
 });
 
 $app->post('/trimet', function() use ($app, $trimet_api) {
     $start_location = Location::find($_POST['start-point-id']);
     $end_location = Location::find($_POST['end-point-id']);
-
+    $this_lat = $_POST['this_lat'];
+    $this_lng = $_POST['this_lng'];
     Itinerary::deleteAll();
     Leg::deleteAll();
     $date = '3-7-2017';
@@ -60,6 +61,7 @@ $app->post('/trimet', function() use ($app, $trimet_api) {
 
     parseTrimetResults($request_url);
 
+    // return "Stop";
     return $app->redirect('/show_results');
 });
 

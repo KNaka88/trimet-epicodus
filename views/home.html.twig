@@ -6,6 +6,8 @@
 
     <form class="form-group" action='/trimet' method='post'>
         <label for='start'>Start</label>
+        <input type="button" id="this_lat" name="this_lat" >
+        <input type="button" id="this_lng" name="this_lng">
         <select class="form-control" id='start' name='start-point-id'>
             <option>Current Location</option>
             {% for location in locations %}
