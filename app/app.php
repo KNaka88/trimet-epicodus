@@ -30,17 +30,17 @@ $app->register(new Silex\Provider\TwigServiceProvider(), [
 $app->get('/', function() use ($app, $google_api) {
 
     $locations = Location::getAll();
-    $time = date('h:ia');
+    $time = date('g:i');
     return $app['twig']->render('home.html.twig', [
         'locations' => $locations, 'time' => $time,
         'google_api' => $google_api
     ]);
 });
 
-$app->get('/show_results', function() use ($app) {
+$app->get('/show_results', function() use ($app, $google_api) {
     $itineraries = Itinerary::getAll();
     return $app['twig']->render('results.html.twig', [
-        'itineraries' => $itineraries, 'locations'=> Location::getAll()
+        'itineraries' => $itineraries, 'locations'=> Location::getAll(), 'google_api' => $google_api
     ]);
 });
 
@@ -50,9 +50,11 @@ $app->post('/trimet', function() use ($app, $trimet_api) {
 
     Itinerary::deleteAll();
     Leg::deleteAll();
-    $date = '3-7-2017';
-    $time = '4:12%20PM'; // time + AM or PM
-    $arr  = 'D';  // D: departure time, A: Arrival time, nothing: current time
+    $date_time_strings = explode('T', $_POST['date-time']);
+    $date_obj = DateTime::createFromFormat('Y-m-d H:i', $date_time_strings[0] . ' ' . $date_time_strings[1]);
+    $date = $date_obj->format('n-j-Y');
+    $time = "{$date_obj->format('g:i')}%20{$date_obj->format('A')}"; // time + AM or PM
+    $arr  = $_POST['time-priority'];  // D: departure time, A: Arrival time, nothing: current time
 
     $request_url =
     "https://developer.trimet.org/ws/V1/trips/tripplanner/" .

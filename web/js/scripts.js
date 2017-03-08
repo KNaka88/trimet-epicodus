@@ -1,3 +1,20 @@
+$(document).ready(function() {
+    resetDate();
+
+    $('button#leave-now-btn').click(function() {
+        resetDate();
+    });
+});
+
+var resetDate = function() {
+    var now = new Date();
+    var minutes = ('0' + now.getMinutes()).slice(-2);
+    var hours = now.getHours() + '';
+    var day = ("0" + now.getDate()).slice(-2);
+    var month = ("0" + (now.getMonth() + 1)).slice(-2);
+    var today = now.getFullYear()+"-"+(month)+"-"+(day)+'T'+(hours)+':'+(minutes);
+    $('input#datetime-picker').val(today);
+};
 
 // function initMap() {
 //   map = new google.maps.Map(document.getElementById('map'), {

@@ -24,13 +24,17 @@
         <label for="search">Enter an Address:</label>
         <input class="form-control" type="text" name="search" value="">
         <br>
+        <select name='time-priority'>
+            <option value='D'>Leave at</option>
+            <option value='A'>Arrive by</option>
+        </select>
+        <input type='datetime-local' id='datetime-picker' name='date-time'>
 
-        <label for="time">Time</label>
-        <input class="form-control" type="text" name="time" value="{{time}}">
         <br>
 
         <button class="btn btn-success" type='submit'>Route</button>
     </form>
+    <button id='leave-now-btn'>Leave Now</button>
 </div>
 <div class="row">
     <div id="map" style="width: 75vw; height: 40vh;"></div>
