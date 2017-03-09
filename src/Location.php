@@ -43,8 +43,10 @@ class Location
 
     function save()
     {
+        $description = filter_var($this->getDescription(), FILTER_SANITIZE_MAGIC_QUOTES);
+        $GLOBALS['DB']->exec("INSERT INTO locations (latitude, longitude, description, stop_id) VALUES ({$this->getLatitude()}, {$this->getLongitude()}, '{$description}', {$this->getStopId()});");
 
-        $GLOBALS['DB']->exec("INSERT INTO locations (latitude, longitude, description, stop_id) VALUES ({$this->getLatitude()}, {$this->getLongitude()}, '{$this->getDescription()}', {$this->getStopId()});");
+    
         $this->id = $GLOBALS['DB']->lastInsertId();
 
     }
@@ -59,7 +61,7 @@ class Location
             $description= $location['description'];
             $stop_id = $location['stop_id'];
             $id= $location['id'];
-            $new_location= new Location($latitude, $longitude, $description, $stop_id, $id);
+            $new_location= new Location($latitude, $longitude, $description, $stop_id, $id, 100);
             array_push($locations, $new_location);
         }
         return $locations;
@@ -72,11 +74,22 @@ class Location
 
     static function find($search_id)
     {
-        $found_location = null;
-        $query = $GLOBALS['DB']->query("SELECT * FROM locations WHERE id = {$search_id};");
-        $query->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Location', [ 'latitude', 'longitude', 'description', 'stop_id', 'id' ]);
-        $found_location = $query->fetch();
+        // $found_location = null;
+        // $query = $GLOBALS['DB']->query("SELECT * FROM locations WHERE id = {$search_id};");
+        // $query->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Location', [ 'latitude', 'longitude', 'description', 'stop_id', 'id' ]);
+        // $found_location = $query->fetch();
+        // var_dump($found_location);
+        // return $found_location;
+        $found_location= null;
+        $all_locations= Location::getAll();
+        foreach ($all_locations as $location) {
+
+            if ($location->getId()==$search_id) {
+                $found_location= $location;
+            }
+        }
         return $found_location;
+
     }
 }
 ?>

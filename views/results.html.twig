@@ -1,14 +1,37 @@
 {% extends 'template.html.twig' %}
 
-
 {% block content %}
+<div class="well">
+
+    <div class='row'>
+        <!-- <div class='col-md-3'>
+
+            {% for from in from_array %}
+            <li>START: {{from.getDescription}}</li>
+            {% endfor %}
+        </div>
+
+        <div class='col-md-3'>
+            {% for to in from_array %}
+            <li>END: {{to.getDescription}}</li>
+            {% endfor %}
+        </div>
+    </div> -->
+    <ul>
+        {% for leg in legs %}
+            {% if leg.getOrder == 'start' %}
+                <li>Start: {{ leg.getFrom.getDescription }}</li>
+            {% elseif leg.getOrder == 'transfer' %}
+                <li>Transfer at: {{ leg.getFrom.getDescription }}</li>
+            {% elseif leg.getOrder == 'end' %}
+                <li>Arrive at: {{ leg.getTo.getDescription }}</li>
+            {% else %}
+                <li>Walk from {{ leg.getFrom.getDescription }} to {{ leg.getTo.getDescription }}</li>
+            {% endif %}
+        {% endfor %}
+    </ul>
 
 
-
-
-{% if locations is not empty %}
-{% endif %}
-
-
+</div>
 
 {% endblock %}
