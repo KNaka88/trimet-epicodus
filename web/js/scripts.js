@@ -22,13 +22,26 @@ function initMap() {
     var map = new google.maps.Map(document.getElementById('map'), {
         //Epicodus Location
         center: {lat:45.5206223, lng:-122.6795871 },
-        zoom: 17
+        zoom: 15
     });
     var infoWindow = new google.maps.InfoWindow({map: map});
 
     map.addListener('click', function(e) {
-        console.log("Clicked");
         placeMarkerAndPanTo(e.latLng, map);
+    });
+
+    var rail_system = document.getElementById("rail_system");
+    rail_system.addEventListener('click', function(event) {
+        var ctaLayer = new google.maps.KmlLayer({
+            url: 'https://developer.trimet.org/gis/data/tm_rail_lines.kml',
+            map: map
+        });
+
+        var ctaLayer2 = new google.maps.KmlLayer({
+            url: 'https://developer.trimet.org/gis/data/tm_rail_stops.kml',
+            map: map
+        });
+
     });
 
     //    Try HTML5 geolocation.
@@ -44,11 +57,6 @@ function initMap() {
             document.getElementById("cur_lat").setAttribute("value", curLat);
             document.getElementById("cur_lng").setAttribute("value", curLng);
 
-
-            var ctaLayer = new google.maps.KmlLayer({
-                url: 'https://developer.trimet.org/gis/data/tm_rail_lines.kml',
-                map: map
-            });
 
             infoWindow.setPosition(pos);
             infoWindow.setContent('You are here.');

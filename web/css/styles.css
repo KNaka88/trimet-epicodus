@@ -1,0 +1,10 @@
+
+div#map {
+
+    width: 75vw;
+    height: 40vh;
+    border-radius: 2%;
+ }
+ button {
+     margin-top: 1vh;
+ }

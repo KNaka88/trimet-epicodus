@@ -2,46 +2,64 @@
 
 {% block content %}
 <div class="row">
-    <h3> Today: {{ "now"|date("m/d/Y") }}</h3>
 
     <form class="form-group" action='/trimet' method='post'>
-        <label for='start'>Start</label>
-        <select class="form-control" id='start' name='start-point-id'>
-            <option value='current'>Current Location</option>
-            {% for location in locations %}
-            <option value='{{ location.getId }}'>{{ location.getDescription }}</option>
-            {% endfor %}
-        </select>
+        <div class='col-md-12'>
+            <h3> Today: {{ "now"|date("m/d/Y") }}</h3>
+            <div id="map"></div>
+        </div>
+        <div class='col-md-4'>
+            <label for='start'>Start</label>
+            <select class="form-control" id='start' name='start-point-id'>
+                <option value='current'>Current Location</option>
+                {% for location in locations %}
+                <option value='{{ location.getId }}'>{{ location.getDescription }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label for='end'>End</label>
+            <select class="form-control" id='end' name='end-point-id'>
+                {% for location in locations %}
+                <option value='{{ location.getId }}'>{{ location.getDescription }}</option>
+                {% endfor %}
+            </select><br>
+            <br>
+        </div>
+        <div class="col-md-4">
+            <label>Date and Time</label>
+            <div class='row'>
+                <div class='col-md-4'>
+                    <select name='time-priority' class='form-control'>
+                        <option value='D'>Leave at</option>
+                        <option value='A'>Arrive by</option>
+                    </select>
+                </div>
+                <div class='col-md-8'>
+                    <input type='datetime-local' id='datetime-picker' class='form-control'  name='date-time'>
+                </div>
+            </div>
+        </div>
+        <div class='col-md-6'>
+            <button id="rail_system" type='button' class='btn btn-primary btn-block'>Show Rail System</button>
+        </div>
+        <div class='col-md-6'>
+            <button id='leave-now-btn' type='button' class='btn btn-warning btn-block'>Set Current Time</button>
+        </div>
 
-        <br>
-        <br>
-        <label for='end'>End</label>
-        <select class="form-control" id='end' name='end-point-id'>
-            {% for location in locations %}
-            <option value='{{ location.getId }}'>{{ location.getDescription }}</option>
-            {% endfor %}
-        </select><br>
-        <br>
-        <select name='time-priority'>
-            <option value='D'>Leave at</option>
-            <option value='A'>Arrive by</option>
-        </select>
-        <input type='datetime-local' id='datetime-picker' name='date-time'>
-
-        <br>
-
-        <input id="cur_lat" name="cur_lat" type="hidden">
-        <input id="cur_lng" name="cur_lng" type="hidden">
-        <input id="dest_lat" name="dest_lat" type="hidden">
-        <input id="dest_lng" name="dest_lng" type="hidden">
-
-        <button class="btn btn-success" type='submit'>Route</button>
+        <div class="col-md-12">
+            <button id="submit" class="btn btn-success btn-block" type='submit'>Route</button>
+        </div>
+        <div class="col-md-12">
+            <input id="cur_lat" name="cur_lat" type="hidden">
+            <input id="cur_lng" name="cur_lng" type="hidden">
+            <input id="dest_lat" name="dest_lat" type="hidden">
+            <input id="dest_lng" name="dest_lng" type="hidden">
+        </div>
     </form>
-    <button id='leave-now-btn'>Leave Now</button>
+
 </div>
-<div class="row">
-    <div id="map" style="width: 75vw; height: 40vh;"></div>
-</div>
+
 {% endblock %}
 
 {% block body_scripts %}
