@@ -1,10 +1,48 @@
+h3 {
+    color: #eaf1f7;
+
+}
+
+
+img#background {
+    min-height: 100%;
+    min-width: 1024px;
+
+    width: 100%;
+    height: auto;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    -webkit-filter: opacity(.5);
+    filter: opacity(.5);
+    z-index: -1;
+}
+
+h1 {
+    text-align: center;
+    font-family: 'Caveat Brush', cursive;
+    font-size: 9rem;
+    font-weight:bolder;
+    color: blue;
+}
+
 
 div#map {
-
-    width: 75vw;
-    height: 40vh;
     border-radius: 2%;
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 55vh !important;
  }
+
+div {
+    margin-top: 1%;
+}
+
  button {
-     margin-top: 1vh;
+     margin-top: 5px;
+     height: 5rem;
+     margin-bottom: 5px;
  }
