@@ -96,7 +96,6 @@ $app->post('/trimet', function() use ($app, $trimet_api) {
         $dest_lat = $end_location->getLatitude();
         $dest_lng = $end_location->getLongitude();
     }
-
     Itinerary::deleteAll();
     Leg::deleteAll();
     $date_time_strings = explode('T', $_POST['date-time']);
@@ -108,12 +107,10 @@ $app->post('/trimet', function() use ($app, $trimet_api) {
     // Setting Destination (On process)
     $request_url =
     "https://developer.trimet.org/ws/V1/trips/tripplanner/" .
-    "maxIntineraries/3/format/xml/fromCoord/{$start_lng},{$start_lat}/toCoord/{$dest_lng},{$dest_lat}/date/{$date}/time/{$time}/arr/{$arr}/min/T/walk/0.50/mode/T/Format=XML/MaxIntineraries=1/appId/{$trimet_api}";
+    "maxIntineraries/3/format/xml/fromCoord/{$start_lng},{$start_lat}/toCoord/{$dest_lng},{$dest_lat}/date/{$date}/time/{$time}/arr/{$arr}/min/T/walk/0.50/mode/T/appId/{$trimet_api}";
 
 
     parseTrimetResults($request_url);
-    // return "s";
-    // return $app->redirect($request_url);
     return $app->redirect('/show_results');
 });
 
@@ -133,6 +130,7 @@ function parseTrimetResults($request_url)
         $time_distance = $itinerary->{"time-distance"};
         $distance = $time_distance->distance; //11.26
         $start_time = DateTime::createFromFormat('n/j/y g:i A', $time_distance->date . ' ' . $time_distance->startTime);
+
         $end_time = DateTime::createFromFormat('n/j/y g:i A', $time_distance->date . ' ' . $time_distance->endTime);
         $new_itinerary = new Itinerary($distance, $start_time->format('Y-m-d H:i:s'), $end_time->format('Y-m-d H:i:s'));
         $new_itinerary->save();
