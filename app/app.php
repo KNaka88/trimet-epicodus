@@ -3,7 +3,6 @@ date_default_timezone_set('America/Los_Angeles');
 
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../api_keys.php';
-
 require_once __DIR__ . '/../src/Location.php';
 require_once __DIR__ . '/../src/Itinerary.php';
 require_once __DIR__ . '/../src/Leg.php';
@@ -28,10 +27,6 @@ $app->register(new Silex\Provider\TwigServiceProvider(), [
 //*********************************
 // ROUTES
 //*********************************
-
-
-
-
 $app->get('/', function() use ($app, $google_api) {
 
     $locations = Location::getAll();
@@ -44,12 +39,38 @@ $app->get('/', function() use ($app, $google_api) {
 
 $app->get('/show_results', function() use ($app) {
     $itineraries = Itinerary::getAll();
-    $location = Location::getAll(); // array[location1, location2, location3];
+    $itinerary = $itineraries[0];
+    $legs = $itinerary->getLegs();
+    $leg_count = count($legs);
 
+    $from_array = [];
+    foreach($legs as $leg) {
+        $leg_from_id = $leg->getFromId();
+        $from_location = Location::Find($leg_from_id);
+        array_push($from_array, $from_location);
+    }
+
+    $to_array = [];
+    foreach($legs as $leg) {
+        $leg_to_id = $leg->getToId();
+        $to_location = Location::Find($leg_to_id);
+        array_push($to_array, $to_location);
+    }
+
+    // $first_location_from = Location::Find($first_id);
+    // $from1= $first_location_from->getDescription();
+    // $first_location_to = Location::Find($first_id);
+    // $first_location_to->getDescription();
+
+    // $to_description = $to_location->getDescription;
+    // $end_loc= $legs->getToId();
+
+    $locations = Location::getAll();
 
     return $app['twig']->render('results.html.twig', [
-        'itineraries' => $itineraries, 'locations'=> Location::getAll()
+        'legs'=> $legs, 'itineraries' => $itineraries, 'locations'=> Location::getAll(), "from_array" => $from_array, "to_array" => $to_array
     ]);
+    // 'firstLocationFrom' => $first_location_from, 'location'=>$location, 'location2'=>$location2,
 });
 
 
@@ -75,8 +96,6 @@ $app->post('/trimet', function() use ($app, $trimet_api) {
         $dest_lat = $end_location->getLatitude();
         $dest_lng = $end_location->getLongitude();
     }
-
-
     Itinerary::deleteAll();
     Leg::deleteAll();
     $date_time_strings = explode('T', $_POST['date-time']);
@@ -91,7 +110,6 @@ $app->post('/trimet', function() use ($app, $trimet_api) {
     "maxIntineraries/3/format/xml/fromCoord/{$start_lng},{$start_lat}/toCoord/{$dest_lng},{$dest_lat}/date/{$date}/time/{$time}/arr/{$arr}/min/T/walk/0.50/mode/T/appId/{$trimet_api}";
 
 
-
     parseTrimetResults($request_url);
     return $app->redirect('/show_results');
 });
@@ -101,18 +119,18 @@ $app->post('/trimet', function() use ($app, $trimet_api) {
 //*********************************
 function parseTrimetResults($request_url)
 {
-
     $xml=simplexml_load_file($request_url) or die("Error: Cannot create object");
 
     //itineraries
     $itineraries = $xml->itineraries;
     $itineraries_count = $itineraries->attributes()->count;
-
     for($i=0; $i<$itineraries_count; $i++){
+
         $itinerary = $itineraries->itinerary[$i];
         $time_distance = $itinerary->{"time-distance"};
         $distance = $time_distance->distance; //11.26
         $start_time = DateTime::createFromFormat('n/j/y g:i A', $time_distance->date . ' ' . $time_distance->startTime);
+
         $end_time = DateTime::createFromFormat('n/j/y g:i A', $time_distance->date . ' ' . $time_distance->endTime);
         $new_itinerary = new Itinerary($distance, $start_time->format('Y-m-d H:i:s'), $end_time->format('Y-m-d H:i:s'));
         $new_itinerary->save();
@@ -126,9 +144,7 @@ function parseTrimetResults($request_url)
             $mode = $legs[$j]->attributes()->mode;
             $order = $legs[$j]->attributes()->order;
 
-            $leg_start_time = null;
-            $leg_end_time = null;
-
+            var_dump(!empty($legs[$j]->{"time-distance"}->startTime));
             if(!empty($legs[$j]->{"time-distance"}->startTime)){
                 $leg_start_time =
                 DateTime::createFromFormat('n/j/y g:i A', $time_distance->date . ' ' . $legs[$j]->{"time-distance"}->startTime)->format('Y-m-d H:i:s');
@@ -138,16 +154,22 @@ function parseTrimetResults($request_url)
                 $leg_distance = $legs[$j]->{"time-distance"}->distance;
                 $route_number = $legs[$j]->route->number;
                 $route_name = $legs[$j]->route->name;
+            }else {
+
+
             }
 
+            $from = $legs[$j]->from;
+            $to = $legs[$j]->to;
 
-
-            $to_location = new Location($to->pos->lat, $to->pos->long, $to->description);
-            $to_location->save();
-            $from_location = new Location($from->pos->lat, $from->pos->long, $from->description);
+            $from_location = new Location($from->pos->lat, $from->pos->lon, $from->description, 100);
             $from_location->save();
-            $new_leg = new Leg($mode, $leg_distance, $from_location->getId(), $to_location->getId(), $itinerary_id, $j, $leg_start_time, $leg_end_time, $order, $route_number, $route_name);
+            // var_dump($from_location);
 
+            $to_location = new Location($to->pos->lat, $to->pos->lon, $to->description, 100);
+            $to_location->save();
+
+            $new_leg = new Leg($mode, $leg_distance, $from_location->getId(), $to_location->getId(), $itinerary_id, $j, $leg_start_time, $leg_end_time, $order, $route_number, $route_name);
             $new_leg->save();
 
         }

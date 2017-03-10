@@ -2,7 +2,8 @@
 
 {% block content %}
 <div class="row">
-    
+
+
     <form class="form-group" action='/trimet' method='post'>
         <div class='col-md-12'>
             <h3> Today: {{ "now"|date("m/d/Y") }}</h3>
@@ -12,17 +13,17 @@
             <label for='start'>Start</label>
             <select class="form-control" id='start' name='start-point-id'>
                 <option value='current'>Current Location</option>
-                {% for location in locations %}
-                <option value='{{ location.getId }}'>{{ location.getDescription }}</option>
-                {% endfor %}
+                <option value='1'>{{ locations[0].getDescription }}</option>
+                <option value='2'>{{ locations[1].getDescription }}</option>
+                <option value='3'>{{ locations[2].getDescription }}</option>
             </select>
         </div>
         <div class="col-md-4">
             <label for='end'>End</label>
             <select class="form-control" id='end' name='end-point-id'>
-                {% for location in locations %}
-                <option value='{{ location.getId }}'>{{ location.getDescription }}</option>
-                {% endfor %}
+                <option value='1'>{{ locations[0].getDescription }}</option>
+                <option value='2'>{{ locations[1].getDescription }}</option>
+                <option value='3'>{{ locations[2].getDescription }}</option>
             </select><br>
             <br>
         </div>

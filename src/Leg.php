@@ -93,9 +93,19 @@ class Leg
         return $this->from_id;
     }
 
+    function getFrom()
+    {
+        return Location::find($this->getFromId());
+    }
+
     function getToId()
     {
         return $this->to_id;
+    }
+
+    function getTo()
+    {
+        return Location::find($this->getToId());
     }
 
     function setItineraryId($new_value)
