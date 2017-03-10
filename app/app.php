@@ -57,20 +57,13 @@ $app->get('/show_results', function() use ($app) {
         array_push($to_array, $to_location);
     }
 
-    // $first_location_from = Location::Find($first_id);
-    // $from1= $first_location_from->getDescription();
-    // $first_location_to = Location::Find($first_id);
-    // $first_location_to->getDescription();
-
-    // $to_description = $to_location->getDescription;
-    // $end_loc= $legs->getToId();
 
     $locations = Location::getAll();
 
     return $app['twig']->render('results.html.twig', [
         'legs'=> $legs, 'itineraries' => $itineraries, 'locations'=> Location::getAll(), "from_array" => $from_array, "to_array" => $to_array
     ]);
-    // 'firstLocationFrom' => $first_location_from, 'location'=>$location, 'location2'=>$location2,
+
 });
 
 
@@ -107,12 +100,12 @@ $app->post('/trimet', function() use ($app, $trimet_api) {
     // Setting Destination (On process)
     $request_url =
     "https://developer.trimet.org/ws/V1/trips/tripplanner/" .
-    "maxIntineraries/3/format/xml/fromCoord/{$start_lng},{$start_lat}/toCoord/{$dest_lng},{$dest_lat}/date/{$date}/time/{$time}/arr/{$arr}/min/T/walk/0.50/mode/T/appId/{$trimet_api}";
+    "maxIntineraries/3/format/xml/fromCoord/{$start_lng},{$start_lat}/toCoord/{$dest_lng},{$dest_lat}/date/{$date}/time/{$time}/arr/{$arr}/min/T/walk/0.50/mode/A/appId/{$trimet_api}";
 
 
     parseTrimetResults($request_url);
-    return $app->redirect('/show_results');
-    // return $app->redirect($request_url);
+    // return $app->redirect('/show_results');
+    return $app->redirect($request_url);
 });
 
 //*********************************
@@ -165,7 +158,6 @@ function parseTrimetResults($request_url)
 
             $from_location = new Location($from->pos->lat, $from->pos->lon, $from->description, 100);
             $from_location->save();
-            // var_dump($from_location);
 
             $to_location = new Location($to->pos->lat, $to->pos->lon, $to->description, 100);
             $to_location->save();

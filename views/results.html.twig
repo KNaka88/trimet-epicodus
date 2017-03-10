@@ -4,32 +4,49 @@
 <div class="well">
 
     <div class='row'>
-        <!-- <div class='col-md-3'>
+      {% for itinerary in itineraries %}
+      <p>Result{{loop.index}}</p>
+      <p>Depart at: {{itinerary.getStartTime}}</p>
+      <p>Arrive at: {{itinerary.getEndTime}}</p>
+        <ul>
+          {% for leg in itinerary.getLegs %}
+          <div class="col-md-12">
+            {% if loop.first %}
+              <li>{{loop.index}}: {{ leg.getFrom.getDescription }} </li>
+              <ul>
+                <li>{{leg.getRouteName}}</li>
+                <li>Start Time: {{leg.getStartTime}}</li>
+                <li>End Time: {{leg.getEndTime}}</li>
+              </ul>
 
-            {% for from in from_array %}
-            <li>START: {{from.getDescription}}</li>
-            {% endfor %}
-        </div>
-
-        <div class='col-md-3'>
-            {% for to in from_array %}
-            <li>END: {{to.getDescription}}</li>
-            {% endfor %}
-        </div>
-    </div> -->
-    <ul>
-        {% for leg in legs %}
-            {% if leg.getOrder == 'start' %}
-                <li>Start: {{ leg.getFrom.getDescription }}</li>
-            {% elseif leg.getOrder == 'transfer' %}
-                <li>Transfer at: {{ leg.getFrom.getDescription }}</li>
-            {% elseif leg.getOrder == 'end' %}
-                <li>Arrive at: {{ leg.getTo.getDescription }}</li>
-            {% else %}
-                <li>Walk from {{ leg.getFrom.getDescription }} to {{ leg.getTo.getDescription }}</li>
             {% endif %}
-        {% endfor %}
-    </ul>
+            {% if not loop.first and not loop.last %}
+              <li>{{loop.index}}: {{leg.getTo.getDescription}}</li>
+              <ul>
+                <li>{{leg.getRouteName}}</li>
+                <li>Start Time: {{leg.getStartTime}}</li>
+                <li>End Time: {{leg.getEndTime}}</li>
+              </ul>
+            {% endif %}
+
+
+            {% if loop.last %}
+              {% if leg.getTo.getDescription == "0.0, 0.0" %}
+                <li>{{loop.index}}: Walking</li>
+              {% else %}
+                <li>{{loop.index}}: {{leg.getTo.getDescription}}</li>
+              {% endif %}
+              <ul>
+                <li>{{leg.getRouteName}}</li>
+                <li>Start Time: {{leg.getStartTime}}</li>
+                <li>End Time: {{leg.getEndTime}}</li>
+              </ul>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </ul>
+      {% endfor %}
+
 
 
 </div>
