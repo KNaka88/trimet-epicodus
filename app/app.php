@@ -104,8 +104,8 @@ $app->post('/trimet', function() use ($app, $trimet_api) {
 
 
     parseTrimetResults($request_url);
-    // return $app->redirect('/show_results');
-    return $app->redirect($request_url);
+    return $app->redirect('/show_results');
+    // return $app->redirect($request_url);
 });
 
 //*********************************
@@ -138,7 +138,7 @@ function parseTrimetResults($request_url)
             $mode = $legs[$j]->attributes()->mode;
             $order = $legs[$j]->attributes()->order;
 
-            var_dump(!empty($legs[$j]->{"time-distance"}->startTime));
+
             if(!empty($legs[$j]->{"time-distance"}->startTime)){
                 $leg_start_time =
                 DateTime::createFromFormat('n/j/y g:i A', $time_distance->date . ' ' . $legs[$j]->{"time-distance"}->startTime)->format('Y-m-d H:i:s');
@@ -148,8 +148,7 @@ function parseTrimetResults($request_url)
                 $leg_distance = $legs[$j]->{"time-distance"}->distance;
                 $route_number = $legs[$j]->route->number;
                 $route_name = $legs[$j]->route->name;
-            }else {
-
+                $leg_stop_sequence = $legs[$j]->to->stopSequence;
 
             }
 
@@ -162,9 +161,13 @@ function parseTrimetResults($request_url)
             $to_location = new Location($to->pos->lat, $to->pos->lon, $to->description, 100);
             $to_location->save();
 
-            $new_leg = new Leg($mode, $leg_distance, $from_location->getId(), $to_location->getId(), $itinerary_id, $j, $leg_start_time, $leg_end_time, $order, $route_number, $route_name);
-            $new_leg->save();
-
+            if(!empty($legs[$j]->{"time-distance"}->startTime)){
+              $new_leg = new Leg($mode, $leg_distance, $from_location->getId(), $to_location->getId(), $itinerary_id, $j, $leg_start_time, $leg_end_time, $order, $route_number, $route_name, $leg_stop_sequence);
+              $new_leg->save();
+            }else{
+              $new_leg = new Leg($mode, $leg_distance, $from_location->getId(), $to_location->getId(), $itinerary_id, $j, $order);
+              $new_leg->save();
+          }
         }
     }
 }

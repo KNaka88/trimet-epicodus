@@ -12,35 +12,48 @@
           {% for leg in itinerary.getLegs %}
           <div class="col-md-12">
             {% if loop.first %}
-              <li>{{loop.index}}: {{ leg.getFrom.getDescription }} </li>
-              <ul>
-                <li>{{leg.getRouteName}}</li>
-                <li>Start Time: {{leg.getStartTime}}</li>
-                <li>End Time: {{leg.getEndTime}}</li>
-              </ul>
-
-            {% endif %}
-            {% if not loop.first and not loop.last %}
-              <li>{{loop.index}}: {{leg.getTo.getDescription}}</li>
-              <ul>
-                <li>{{leg.getRouteName}}</li>
-                <li>Start Time: {{leg.getStartTime}}</li>
-                <li>End Time: {{leg.getEndTime}}</li>
-              </ul>
-            {% endif %}
-
-
-            {% if loop.last %}
-              {% if leg.getTo.getDescription == "0.0, 0.0" %}
+              {% if leg.getTo.getDescription == "0.0, 0.0" or leg.getTo.getDescription == "0.0, 0.0" %}
                 <li>{{loop.index}}: Walking</li>
               {% else %}
-                <li>{{loop.index}}: {{leg.getTo.getDescription}}</li>
+                <li>{{loop.index}}: From {{ leg.getFrom.getDescription }} to {{leg.getTo.getDescription}} ({{leg.getMode}})</li>
               {% endif %}
               <ul>
                 <li>{{leg.getRouteName}}</li>
                 <li>Start Time: {{leg.getStartTime}}</li>
                 <li>End Time: {{leg.getEndTime}}</li>
               </ul>
+              <p><br>---{{leg.getStopSequence}} stops---</p>
+            {% endif %}
+
+
+
+            {% if not loop.first and not loop.last %}
+              {% if leg.getTo.getDescription == "0.0, 0.0" or leg.getTo.getDescription == "0.0, 0.0" %}
+                <li>{{loop.index}}: Walking</li>
+              {% else %}
+                <li>{{loop.index}}: From {{ leg.getFrom.getDescription }} to {{leg.getTo.getDescription}} ({{leg.getMode}})</li>
+              {% endif %}
+                <ul>
+                  <li>{{leg.getRouteName}}</li>
+                  <li>Start Time: {{leg.getStartTime}}</li>
+                  <li>End Time: {{leg.getEndTime}}</li>
+                </ul>
+                <p><br>---{{leg.getStopSequence}} stops---</p>
+            {% endif %}
+
+
+            {% if loop.last and not loop.first %}
+              {% if leg.getTo.getDescription == "0.0, 0.0" or leg.getTo.getDescription == "0.0, 0.0" %}
+                <li>{{loop.index}}: Walking</li>
+              {% else %}
+                <li>{{loop.index}}: From {{ leg.getFrom.getDescription }} to {{leg.getTo.getDescription}} ({{leg.getMode}})</li>
+              {% endif %}
+              <ul>
+                <li>{{leg.getRouteName}}</li>
+                <li>Start Time: {{leg.getStartTime}}</li>
+                <li>End Time: {{leg.getEndTime}}</li>
+              </ul>
+                <p><br>---{{leg.getStopSequence}} stops---</p>
             {% endif %}
           </div>
           {% endfor %}
