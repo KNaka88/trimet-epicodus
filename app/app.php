@@ -112,6 +112,7 @@ $app->post('/trimet', function() use ($app, $trimet_api) {
 
     parseTrimetResults($request_url);
     return $app->redirect('/show_results');
+    // return $app->redirect($request_url);
 });
 
 //*********************************
