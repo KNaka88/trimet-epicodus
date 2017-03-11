@@ -44,9 +44,9 @@
                   {% else %}
                     <li>{{loop.index}}: From <span class="from-place">{{ leg.getFrom.getDescription }}</span> to <span class="to-place">{{leg.getTo.getDescription}}</span> ({{leg.getMode}})</li>
                     <ul>
-                      <li>Ride: {{leg.getRouteName}}</li>
-                      <li>Start Time: {{leg.getStartTime}}</li>
-                      <li>End Time: {{leg.getEndTime}}</li>
+                      <li><span class="info">Ride:</span> {{leg.getRouteName}}</li>
+                      <li><span class="info">Start Time:</span> {{leg.getStartTime}}</li>
+                      <li><span class="info">End Time:</span> {{leg.getEndTime}}</li>
                     </ul>
                   {% endif %}
                 {% endif %}
@@ -57,9 +57,9 @@
                   {% else %}
                     <li>{{loop.index}}: From <span class="from-place">{{ leg.getFrom.getDescription }}</span> to <span class="to-place">{{leg.getTo.getDescription}}</span> ({{leg.getMode}})</li>
                     <ul>
-                      <li>Ride: {{leg.getRouteName}}</li>
-                      <li>Start Time: {{leg.getStartTime}}</li>
-                      <li>End Time: {{leg.getEndTime}}</li>
+                      <li><span class="info">Ride:</span> {{leg.getRouteName}}</li>
+                      <li><span class="info">Start Time:</span> {{leg.getStartTime}}</li>
+                      <li><span class="info">End Time:</span> {{leg.getEndTime}}</li>
                     </ul>
                   {% endif %}
                 {% endif %}
@@ -71,9 +71,9 @@
                   {% else %}
                     <li>{{loop.index}}: From {{ leg.getFrom.getDescription }} to <span class="to-place">{{leg.getTo.getDescription}} </span>({{leg.getMode}})</li>
                     <ul>
-                      <li>Ride: {{leg.getRouteName}}</li>
-                      <li>Start Time: {{leg.getStartTime}}</li>
-                      <li>End Time: {{leg.getEndTime}}</li>
+                      <li class="info">Ride:</span> {{leg.getRouteName}}</li>
+                      <li><span class="info">Start Time:</span> {{leg.getStartTime}}</li>
+                      <li><span class="info">End Time:</span> {{leg.getEndTime}}</li>
                     </ul>
                   {% endif %}
                 {% endif %}

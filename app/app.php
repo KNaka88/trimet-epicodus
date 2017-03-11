@@ -159,7 +159,6 @@ function parseTrimetResults($request_url)
                 $route_number = $legs[$j]->route->number;
                 $route_name = $legs[$j]->route->name;
                 $leg_stop_sequence = $legs[$j]->to->stopSequence;
-
             }
 
             $from = $legs[$j]->from;
