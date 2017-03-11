@@ -6,7 +6,7 @@ class Itinerary
     private $start_time;
     private $end_time;
 
-    function __construct($distance, $start_time, $end_time, $id = null)
+    function __construct($distance, $start_time = null, $end_time = null, $id = null)
     {
         $this->id = $id;
         $this->distance = $distance;

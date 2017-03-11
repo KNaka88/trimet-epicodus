@@ -2,9 +2,18 @@ li {
     list-style-type: none;
 }
 
-h3 {
+h3.white {
     color: #eaf1f7;
+}
 
+.card {
+
+  border-bottom: 2px solid lightgray;
+
+}
+
+.from-place, .to-place {
+  font-weight: bold;
 }
 
 
@@ -32,7 +41,7 @@ h1 {
 }
 
 
-div#map {
+#map{
     border-radius: 2%;
     position: relative;
     top: 0;

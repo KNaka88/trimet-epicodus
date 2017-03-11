@@ -9,8 +9,6 @@ require_once __DIR__ . '/../src/Leg.php';
 
 $app = new Silex\Application();
 $app['debug'] = true;
-// use Symfony\Component\Debug\Debug;
-//   Debug::enable();
 
 $server = 'mysql:host=localhost:8889;dbname=trimet';
 $username = 'root';
@@ -37,7 +35,7 @@ $app->get('/', function() use ($app, $google_api) {
     ]);
 });
 
-$app->get('/show_results', function() use ($app) {
+$app->get('/show_results', function() use ($app, $google_api) {
     $itineraries = Itinerary::getAll();
     $itinerary = $itineraries[0];
     $legs = $itinerary->getLegs();
@@ -61,14 +59,13 @@ $app->get('/show_results', function() use ($app) {
     $locations = Location::getAll();
 
     return $app['twig']->render('results.html.twig', [
-        'legs'=> $legs, 'itineraries' => $itineraries, 'locations'=> Location::getAll(), "from_array" => $from_array, "to_array" => $to_array
+        'legs'=> $legs, 'itineraries' => $itineraries, 'locations'=> Location::getAll(), "from_array" => $from_array, "to_array" => $to_array,   'google_api' => $google_api
     ]);
 
 });
 
 
 $app->post('/trimet', function() use ($app, $trimet_api) {
-
 
     $start_location_value = $_POST['start-point-id'];
     if($start_location_value == "current"){
@@ -97,6 +94,13 @@ $app->post('/trimet', function() use ($app, $trimet_api) {
     $time = "{$date_obj->format('g:i')}%20{$date_obj->format('A')}"; // time + AM or PM
     $arr  = $_POST['time-priority'];  // D: departure time, A: Arrival time, nothing: current time
 
+
+    //prevent user typing same coordinate between start and end
+    if($start_lat == $dest_lat && $start_lng == $dest_lng)
+    {
+      return $app->redirect("/");
+    }
+
     // Setting Destination (On process)
     $request_url =
     "https://developer.trimet.org/ws/V1/trips/tripplanner/" .
@@ -124,9 +128,15 @@ function parseTrimetResults($request_url)
         $time_distance = $itinerary->{"time-distance"};
         $distance = $time_distance->distance; //11.26
         $start_time = DateTime::createFromFormat('n/j/y g:i A', $time_distance->date . ' ' . $time_distance->startTime);
-
         $end_time = DateTime::createFromFormat('n/j/y g:i A', $time_distance->date . ' ' . $time_distance->endTime);
-        $new_itinerary = new Itinerary($distance, $start_time->format('Y-m-d H:i:s'), $end_time->format('Y-m-d H:i:s'));
+
+        if($start_time && $end_time){
+          //Case bus or train
+          $new_itinerary = new Itinerary($distance, $start_time->format('Y-m-d H:i:s'), $end_time->format('Y-m-d H:i:s'));
+        }else{
+          //Case Walking (no start time, end time)
+            $new_itinerary = new Itinerary($distance);
+        }
         $new_itinerary->save();
         $itinerary_id = $new_itinerary->getId();
 

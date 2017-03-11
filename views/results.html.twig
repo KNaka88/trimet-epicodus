@@ -25,67 +25,66 @@
     </nav>
 
     {% for itinerary in itineraries %}
-
       {% if loop.index == "1" %}
         <div class="collapse in" id="result{{loop.index}}" aria-expanded="true">
       {% else %}
         <div class="collapse" id="result{{loop.index}}">
-          <p>Result{{loop.index}}</p>
+      {% endif %}
+        <div class="card">
+        <div class="card-block">
+          <h3 class="card-title">Result{{loop.index}}</h3>
           <p>Depart at: {{itinerary.getStartTime}}</p>
           <p>Arrive at: {{itinerary.getEndTime}}</p>
+
           <ul>
-      {% endif %}
-        {% for leg in itinerary.getLegs %}
+            {% for leg in itinerary.getLegs %}
+                {% if loop.first %}
+                  {% if leg.getFrom.getDescription == "0.0, 0.0"%}
+                    <li>{{loop.index}}: From <span class="from-place">Current Location</span> to <span class="to-place">{{leg.getTo.getDescription}}</span>({{leg.getMode}})</li>
+                  {% else %}
+                    <li>{{loop.index}}: From <span class="from-place">{{ leg.getFrom.getDescription }}</span> to <span class="to-place">{{leg.getTo.getDescription}}</span> ({{leg.getMode}})</li>
+                    <ul>
+                      <li>Ride: {{leg.getRouteName}}</li>
+                      <li>Start Time: {{leg.getStartTime}}</li>
+                      <li>End Time: {{leg.getEndTime}}</li>
+                    </ul>
+                  {% endif %}
+                {% endif %}
+
+                {% if not loop.first and not loop.last %}
+                  {% if leg.getMode == "Walk" %}
+                    <li>{{loop.index}}: From <span class="from-place">{{leg.getFrom.getDescription}}</span> to <span class="to-place">{{leg.getTo.getDescription}}</span> ({{leg.getMode}})</li>
+                  {% else %}
+                    <li>{{loop.index}}: From <span class="from-place">{{ leg.getFrom.getDescription }}</span> to <span class="to-place">{{leg.getTo.getDescription}}</span> ({{leg.getMode}})</li>
+                    <ul>
+                      <li>Ride: {{leg.getRouteName}}</li>
+                      <li>Start Time: {{leg.getStartTime}}</li>
+                      <li>End Time: {{leg.getEndTime}}</li>
+                    </ul>
+                  {% endif %}
+                {% endif %}
 
 
-
-          <div class="col-md-12">
-            {% if loop.first %}
-              {% if leg.getFrom.getDescription == "0.0, 0.0"%}
-                <li>{{loop.index}}: From Current Location to {{leg.getTo.getDescription}} ({{leg.getMode}})</li>
-              {% else %}
-                <li>{{loop.index}}: From {{ leg.getFrom.getDescription }} to {{leg.getTo.getDescription}} ({{leg.getMode}})</li>
-                <ul>
-                  <li>Ride: {{leg.getRouteName}}</li>
-                  <li>Start Time: {{leg.getStartTime}}</li>
-                  <li>End Time: {{leg.getEndTime}}</li>
-                </ul>
-              {% endif %}
-            {% endif %}
-
-            {% if not loop.first and not loop.last %}
-              {% if leg.getMode == "Walk" %}
-                <li>{{loop.index}}: From {{leg.getFrom.getDescription}} to {{leg.getTo.getDescription}} ({{leg.getMode}})</li>
-              {% else %}
-                <li>{{loop.index}}: From {{ leg.getFrom.getDescription }} to {{leg.getTo.getDescription}} ({{leg.getMode}})</li>
-                <ul>
-                  <li>Ride: {{leg.getRouteName}}</li>
-                  <li>Start Time: {{leg.getStartTime}}</li>
-                  <li>End Time: {{leg.getEndTime}}</li>
-                </ul>
-              {% endif %}
-            {% endif %}
-
-
-            {% if loop.last and not loop.first %}
-              {% if leg.getTo.getDescription == "0.0, 0.0" %}
-                  <li>{{loop.index}}: From {{leg.getFrom.getDescription}} to Destination ({{leg.getMode}})</li>
-              {% else %}
-                <li>{{loop.index}}: From {{ leg.getFrom.getDescription }} to {{leg.getTo.getDescription}} ({{leg.getMode}})</li>
-                <ul>
-                  <li>Ride: {{leg.getRouteName}}</li>
-                  <li>Start Time: {{leg.getStartTime}}</li>
-                  <li>End Time: {{leg.getEndTime}}</li>
-                </ul>
-              {% endif %}
-            {% endif %}
-          </div>
-        {% endfor %}
-      </ul>
-    </div>
+                {% if loop.last and not loop.first %}
+                  {% if leg.getTo.getDescription == "0.0, 0.0" %}
+                      <li>{{loop.index}}: From <span class="from-place">{{leg.getFrom.getDescription}}</span> to <span class="to-place">Destination</span> ({{leg.getMode}})</li>
+                  {% else %}
+                    <li>{{loop.index}}: From {{ leg.getFrom.getDescription }} to <span class="to-place">{{leg.getTo.getDescription}} </span>({{leg.getMode}})</li>
+                    <ul>
+                      <li>Ride: {{leg.getRouteName}}</li>
+                      <li>Start Time: {{leg.getStartTime}}</li>
+                      <li>End Time: {{leg.getEndTime}}</li>
+                    </ul>
+                  {% endif %}
+                {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+      </div> <!--end of card div -->
+    </div> <!-- end of collapse div -->
     {% endfor %}
-  </div>
-</div>
+  </div> <!--end of row -->
+</div>  <!--end of well -->
 <a href="/"><button class="btn btn-success btn-block">Back to Top</button></a>
 
 {% endblock %}
