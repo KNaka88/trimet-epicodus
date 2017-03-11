@@ -96,7 +96,7 @@ $app->post('/trimet', function() use ($app, $trimet_api) {
 
 
     //prevent user typing same coordinate between start and end
-    if($start_lat == $dest_lat && $start_lng == $dest_lng)
+    if($start_lat == $dest_lat && $start_lng == $dest_lng || $start_lat == "" || $start_lng == "")
     {
       return $app->redirect("/");
     }
