@@ -9,7 +9,7 @@
 This Silex website shows transit routes using the MAX system.
 
 ## Setup/Installation Requirements
-1. Change the file name of api_keys_template.php to api_keys.php, and add your Trimet and Google map API keys
+1. Change the file name of `api_keys_template.php` to `api_keys.php`, and add your Trimet and Google map API keys
 2. Set project root as working directory in CLI.
 3. Run `$ composer install --prefer-source --no-interaction`.
 4. Setup databases.
