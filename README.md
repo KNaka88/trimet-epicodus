@@ -8,13 +8,31 @@
 
 This Silex website shows transit routes using the MAX system.
 
+![sample image](/web/img/image1.png)
+
+![sample image](/web/img/image2.png)
+
+
+## Prerequisites
+You will need the following things properly installed on your computer.
+
+* [Git](https://git-scm.com/)
+* [Composer](https://getcomposer.org/)
+* [MAMP](https://www.mamp.info/en/)
+
+## API Keys
+You will need the following API keys.
+
+* [Google Map](https://developers.google.com/maps/)
+* [Trimet](https://developer.trimet.org/)
+
 ## Setup/Installation Requirements
 1. Change the file name of `api_keys_template.php` to `api_keys.php`, and add your Trimet and Google map API keys
-2. Set project root as working directory in CLI.
-3. Run `$ composer install --prefer-source --no-interaction`.
-4. Setup databases.
-5. Set document root in MAMP > Preferences to `{PROJECT_ROOT}/web`.
-6. Click 'Start Servers' in MAMP.
+2. Set project root as working directory.
+3. `composer install`.
+4. Set document root in MAMP > Preferences to `{PROJECT_ROOT}/web`.
+5. Click 'Start Servers' in MAMP.
+6. Setup databases.
 7. Visit **`localhost:8888`** in web browser.
 
 
